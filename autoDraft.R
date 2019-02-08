@@ -10,6 +10,15 @@ choosePlayers <- function(p, nt, pos, ex = c()) {
                   prob = p[p$Position %in% pos & !(p$Id %in% ex) , 'Owned']))
 }
 
+choosePlayersOrder <- function(p, nt, pos, ex = c()) {
+    # subset
+    p <- p[p$Position %in% pos & !(p$Id %in% ex), ]
+    # order
+    p <- p[order(-p$Owned), ]
+    # select top
+    return(p[1:nt, 'Id'])
+}
+
 printPlayers <- function(p, ids) {
     return(p[p$Id %in% ids, ])
 }
@@ -93,6 +102,7 @@ draft <- data.frame('QB' = sample(qb1),
                     'WR2' = sample(wr2),
                     'TE' = sample(te1),
                     'D' = sample(d1),
+                    'FLEX' = sample(flex1),
                     'B1' = sample(b1),
                     'B2' = sample(b2),
                     'B3' = sample(b3),
@@ -104,7 +114,7 @@ any(duplicated(c(unlist(draft))))
 # format and print it out
 draft.print <- cbind('Team' = sample(team),
                      apply(draft[, 1:7], 2, formatPositionColumn, players),
-                     apply(draft[, 8:11], 2, formatPositionColumnB, players)
+                     apply(draft[, 8:12], 2, formatPositionColumnB, players)
 )
 write.csv(draft.print, "draft.csv", row.names = FALSE)
 
