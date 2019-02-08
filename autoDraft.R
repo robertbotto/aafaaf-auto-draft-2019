@@ -3,18 +3,18 @@
 # Date: 2019-02-08
 
 # functions
-choosePlayers <- function(p, nt, pos, ex = c()) {
+choosePlayersOwn <- function(p, nt, pos, ex = c()) {
     return(sample(x = p[p$Position %in% pos & !(p$Id %in% ex) , 'Id'], 
                   size = nt, 
                   replace = FALSE,
                   prob = p[p$Position %in% pos & !(p$Id %in% ex) , 'Owned']))
 }
 
-choosePlayersOrder <- function(p, nt, pos, ex = c()) {
+choosePlayers <- function(p, nt, pos, ex = c()) {
     # subset
-    p <- p[p$Position %in% pos & !(p$Id %in% ex), ]
+    p <- p[p$Position %in% pos & !(p$Id %in% ex) & p$ADP > 0, ]
     # order
-    p <- p[order(-p$Owned), ]
+    p <- p[order(p$ADP), ]
     # select top
     return(p[1:nt, 'Id'])
 }
@@ -85,14 +85,14 @@ b4 <- choosePlayers(players, number.teams,
                     c(qb1, rb1, rb2, wr1, wr2, te1, flex1, d1, b1, b2, b3))
 
 # assign teams
-team <- c('ro@reloadbags.com',
+team <- c('fpgaffney@gmail.com',
+          'robert.botto@gmail.com',
+          'ro@reloadbags.com',
           'gerik.reload.1@gmail.com',
           'loudstevesq@gmail.com',
-          'Altay.akgun@gmail.com',
           'Christos.d.pappas@gmail.com',
-          'fpgaffney@gmail.com',
           'annettemonnier@gmail.com',
-          'robert.botto@gmail.com')
+          'Altay.akgun@gmail.com')
 
 # randomly assemble benches from samples
 draft <- data.frame('QB' = sample(qb1),
@@ -101,8 +101,8 @@ draft <- data.frame('QB' = sample(qb1),
                     'WR1' = sample(wr1),
                     'WR2' = sample(wr2),
                     'TE' = sample(te1),
-                    'D' = sample(d1),
                     'FLEX' = sample(flex1),
+                    'D' = sample(d1),
                     'B1' = sample(b1),
                     'B2' = sample(b2),
                     'B3' = sample(b3),
@@ -112,9 +112,9 @@ draft <- data.frame('QB' = sample(qb1),
 any(duplicated(c(unlist(draft))))
 
 # format and print it out
-draft.print <- cbind('Team' = sample(team),
-                     apply(draft[, 1:7], 2, formatPositionColumn, players),
-                     apply(draft[, 8:12], 2, formatPositionColumnB, players)
+draft.print <- cbind('Team' = team,
+                     apply(draft[, c(1:6,8)], 2, formatPositionColumn, players),
+                     apply(draft[, c(7,9:12)], 2, formatPositionColumnB, players)
 )
-write.csv(draft.print, "draft.csv", row.names = FALSE)
+write.csv(draft.print, "draft-adp.csv", row.names = FALSE)
 
