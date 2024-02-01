@@ -85,7 +85,7 @@ b4 <- choosePlayers(players, number.teams,
                     c(qb1, rb1, rb2, wr1, wr2, te1, flex1, d1, b1, b2, b3))
 
 # assign teams
-team <- paste('team', 1:8)
+team <- paste('team', 1:number.teams)
 
 # randomly assemble benches from samples
 draft <- data.frame('QB' = sample(qb1),
