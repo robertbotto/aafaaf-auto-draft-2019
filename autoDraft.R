@@ -85,14 +85,7 @@ b4 <- choosePlayers(players, number.teams,
                     c(qb1, rb1, rb2, wr1, wr2, te1, flex1, d1, b1, b2, b3))
 
 # assign teams
-team <- c('fpgaffney@gmail.com',
-          'robert.botto@gmail.com',
-          'ro@reloadbags.com',
-          'gerik.reload.1@gmail.com',
-          'loudstevesq@gmail.com',
-          'Christos.d.pappas@gmail.com',
-          'annettemonnier@gmail.com',
-          'Altay.akgun@gmail.com')
+team <- paste('team', 1:8)
 
 # randomly assemble benches from samples
 draft <- data.frame('QB' = sample(qb1),
